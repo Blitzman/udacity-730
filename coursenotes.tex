@@ -1,6 +1,10 @@
 \documentclass[english, 11pt]{article}
 \usepackage{notes}
 
+\usepackage{acronym}
+\acrodef{GD}{Gradient Descent}
+\acrodef{SGD}{Stochastic Gradient Descent}
+
 % Uncomment these for a different family of fonts
 % \usepackage{cmbright}
 % \renewcommand{\sfdefault}{cmss}
@@ -103,7 +107,7 @@ By doing this, we can map the classifier output probability provided by softmax 
 
 	\subsection{Multinomial Logistic Classification}
 
-	The setting that we have described throughout the previous sections takes an input $x$, which is turned into a logit $y$ by means of a linear model $wx + b = y$. Then, that logit is fed to a softmax layer $S(y)$ which converts those scores into probabilities. At last, the probabilities are compared to the different classes one-hot encoded labels using the cross-entropy function to determine the prediction. This setup is called multinomial logistic classification and it is represented by the following expression:
+	The setting that we have described throughout the previous sections takes an input $x$, which is turned into a logit $y$ by means of a linear model $wx + b = y$. Then, that logit is fed to a softmax layer $S(y)$ which converts those scores into probabilities. At last, the probabilities are compared to the different classes one-hot encoded labels using the cross-entropy function to determine the prediction. This setup is called \emph{multinomial logistic classification} and it is represented by the following expression:
 
 	\begin{align*}
 		D(S(wx + b), L)
@@ -119,13 +123,22 @@ By doing this, we can map the classifier output probability provided by softmax 
 
 	where $N$ is the number of samples $x$ and labels $L$ in the training set. In other words, the loss is the average cross-entropy over the entire training set. This loss, is a function of multiple parameters: the weights and the biases. This function will be large in some areas and small in others. We will find the parameters that cause the loss to be the smallest as possible. By doing this, our problem is turned into a numerical optimization one.
 
-	The simplest way to solve this problem is \emph{gradient descent}. This will take the derivative of the loss with respect to the parameters and follow that derivative by taking steps backwards until we get to a minimum, so the step will be $-\alpha\Delta\zeta(w, b)$. Figure \ref{fig:gradient-descent} represents this procedure for a simple loss function with two parameters.
+	The simplest way to solve this problem is \emph{\ac{GD}}. This will take the derivative of the loss with respect to the parameters and follow that derivative by taking steps backwards until we get to a minimum, so the step will be $-\alpha\Delta\zeta(w, b)$. Figure \ref{fig:gradient-descent} represents this procedure for a simple loss function with two parameters.
 
 	\begin{figure}[!hbt]
 		\centering
 		\includegraphics[width=\textwidth]{l1/figures/contour-scatter}
-		\caption{Gradient descent from a larger area (red) to a smaller one (blue) taking steps following the derivative backwards (black) until the minimum is reached.}
+		\caption{\ac{GD} from a larger area (red) to a smaller one (blue) taking steps following the derivative backwards (black) until the minimum is reached.}
 		\label{fig:gradient-descent}
 	\end{figure}
+
+	\subsection{Stochastic Gradient Descent}
+
+	As we have seen earlier, the loss is huge function which depends on every single element of the training set, which means a lot of computing power if we want to train with big datasets. In practice, we will get more gains the more data we use. In addition, \ac{GD} is iterative, so we will have to compute that loss for many steps, so this will not scale well.
+
+	Instead of computing the loss, we will compute an estimate of it. It will consists of computing the average loss for a tiny random fraction of the training set for each step we take. Then we will compute that estimate, the derivative of that estimate, and pretend that it is the right direction to follow to perform \ac{GD}.
+
+	It might not be the right direction, and sometimes it will increase the loss instead of decreasing it, but this fact will be compensated by doing much more steps of a smaller size. In balance, each step is much cheaper to compute, but we will have to take many more of them to arrive to a solution. In the end, we win by a lot, since this technique called \emph{\ac{SGD}} is vastly more efficient for larger datasets than simple \ac{GD}.
+
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \end{document}
