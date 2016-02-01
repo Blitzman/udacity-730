@@ -42,30 +42,34 @@
   % Table of Contents and List of Figures
   \tocandfigures
   % Abstract
-  \doabstract{These notes are intended as a resource for myself; past, present, or future students of this course, and anyone interested in the material. The goal is to provide an end-to-end resource that covers all material discussed in the course displayed in an organized manner. If you spot any errors or would like to contribute, please contact me directly.}
+  \doabstract{These notes are intended as a resource for myself; past, present, or future students of this course, and anyone interested in the material. The goal is to provide an end-to-end resource that covers all material discussed in the course displayed in an organized manner. If you spot any errors or would like to contribute, please contact me.}
 
 	\section{Machine Learning to Deep Learning}
 
 	\subsection{Linear Model}
 
+	The most simple linear model that allows us to make predictions is represented by the following equation:
 	\begin{align*}
-		wx + b = y
+		wx + b = y\,,
 	\end{align*}
+
+	where $w$ is the weights matrix, $b$ is the bias vector, $x$ is the matrix corresponding to the values of the sample to be clasified, and $y$ is the output or scores vector -- which has as many elements as classes can be classified. The training will change the values of the weights and biases to tune the prediction system so that for each input $x$ its correct class is predicted in $y$.
 
 	\subsection{Softmax}
 
 	The way to turn scores (also known as \emph{logits}) into probabilities is to use a \emph{softmax} function $S$ and apply it to all the elements of the classifier output vector $Y$. Assuming that the output of the classifier has $n$ dimensions, the softmax function is defined as follows
 
 	\begin{align*}
-		S(y_i) = \displaystyle\frac{e^{y_i}}{\displaystyle\sum_{j=0}^{n}e^{y_j}}
+		S(y_i) = \displaystyle\frac{e^{y_i}}{\displaystyle\sum_{j=0}^{n}e^{y_j}}\,.
 	\end{align*}
 
-	There are two important remarks about this softmax function. On the one hand, if the magnitude of the scores increases significantly, the probabilities get close to either $0$ or $1$. On the other hand, if the magnitude of the scores decreases, the probabilities tend to get close to the uniform distribution. In other words, increasing the magnitude of the classifier output makes the system more confident about the decision once softmax is applied and vice-versa. For machine learning systems, we would like to progressively turn the system from unsure to confident.
+	There are two important remarks about this softmax function. On the one hand, if the magnitude of the scores increases significantly, the probabilities get close to either $0$ or $1$. On the other hand, if the magnitude of the scores decreases, the probabilities tend to get close to the uniform distribution. In other words, increasing the magnitude of the classifier output makes the system more confident about the decision once softmax is applied and vice-versa (see Figure \ref{fig:softmax}). For machine learning systems, we would like to progressively turn the system from unsure to confident.
 
 	\begin{figure}[!hbt]
 		\centering
 		\includegraphics[width=0.5\linewidth]{l1/figures/softmax_output}
-		\caption{}
+		\caption{Softmax outputs as the score of class $x$, in blue, increases.}
+		\label{fig:softmax}
 	\end{figure}
 
 	\subsection{One-Hot Encoding}
@@ -92,12 +96,14 @@ By doing this, we can map the classifier output probability provided by softmax 
 	The natural way to measure the difference between two probability vectors is the \emph{cross-entropy} $D$. Given a probability vector from softmax $S(y)$, and a class label one-hot encoded vector $L$, their difference can be expressed as follows
 
 	\begin{align*}
-		D(S, L) = -\displaystyle\sum_{i=0}^{n}L_i \log(S_i)
+		D(S, L) = -\displaystyle\sum_{i=0}^{n}L_i \log(S_i)\,.
 	\end{align*}
 
 	\textbf{Be wary, $D(S, L) \neq D(L, S)$.}
 
 	\subsection{Multinomial Logistic Classification}
+
+	The setting that we have described throughout the previous sections takes an input $x$, which is turned into a logit $y$ by means of a linear model $wx + b = y$. Then, that logit is fed to a softmax layer $S(y)$ which converts those scores into probabilities. At last, the probabilities are compared to the different classes one-hot encoded labels using the cross-entropy function to determine the prediction. This setup is called multinomial logistic classification and it is represented by the following expression:
 
 	\begin{align*}
 		D(S(wx + b), L)
