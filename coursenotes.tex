@@ -71,7 +71,7 @@
 
 	\begin{figure}[!hbt]
 		\centering
-		\includegraphics[width=0.5\linewidth]{l1/figures/softmax_output}
+		\includegraphics[width=0.8\linewidth]{l1/figures/softmax_output}
 		\caption{Softmax outputs as the score of class $x$, in blue, increases.}
 		\label{fig:softmax}
 	\end{figure}
@@ -134,11 +134,23 @@ By doing this, we can map the classifier output probability provided by softmax 
 
 	\subsection{Stochastic Gradient Descent}
 
-	As we have seen earlier, the loss is huge function which depends on every single element of the training set, which means a lot of computing power if we want to train with big datasets. In practice, we will get more gains the more data we use. In addition, \ac{GD} is iterative, so we will have to compute that loss for many steps, so this will not scale well.
+	As we have seen earlier, the loss is huge function which depends on every single element of the training set, which means a lot of computing power if we want to train with big datasets. In practice, we will get more gains the more data we use. In addition, \ac{GD} is iterative, so we will have to compute that loss for many steps, so this will not scale properly for large datasets.
 
 	Instead of computing the loss, we will compute an estimate of it. It will consists of computing the average loss for a tiny random fraction of the training set for each step we take. Then we will compute that estimate, the derivative of that estimate, and pretend that it is the right direction to follow to perform \ac{GD}.
 
 	It might not be the right direction, and sometimes it will increase the loss instead of decreasing it, but this fact will be compensated by doing much more steps of a smaller size. In balance, each step is much cheaper to compute, but we will have to take many more of them to arrive to a solution. In the end, we win by a lot, since this technique called \emph{\ac{SGD}} is vastly more efficient for larger datasets than simple \ac{GD}.
+
+	In addition, to help the \ac{SGD} process, it is important that the inputs have zero mean and equal or small variance. It is also important to initialize weights randomly with zero mean and relatively small variance.
+
+	\subsection{Momentum, Learning Rate Decay, and SGD considerations}
+
+	Each step of \ac{SGD} we take a small step, and on aggregate those steps will take us towards the minimum loss. We can take advantage of the knowledge that we have accumulated from previous steps about where we should be headed. A cheap way to do that is to keep a running average of the gradient, and use that instead of the direction of the current batch of the data to perform the step. This technique is called \emph{momentum}. The running average is computed as $M(w,b) = 0.9M(w,b) + \Delta\zeta(w,b)$ and the step is now expressed as $-\alpha M(w,b)$. This often leads to better and faster convergence.
+
+	When replacing the normal \ac{GD} with \ac{SGD} we star taking noisier and smaller steps towards the minimum loss. So a question arises: what should the size of the step be? There is a whole research area dedicated to solve that question. However, one thing for sure is that it is beneficial to decrease the size of the step as we train. Lowering th learning rate over time is known as \emph{learning rate decay} and the most typical approach consists of applying an exponential decay function to that step or learning rate.
+
+	\textbf{Notice that using a higher learning rate does not necessarily mean that the algorithm learns more or faster. In fact, we can often get to a better model faster by lowering the learning rate. So as a rule of thumb, when things do not work, lower the learning rate.}
+
+	Due to this high number of hyperparameters (initial learning rate, learning rate decay, momentum, batch size, and weight initialization) \ac{SGD} has earned a \textit{black magic} reputation. Some modifications have arisen, like ADAGRAD, which implicitly sets the initial learning rate, decays it and does momentum, making training less sensitive to hyperparameters but also less precise than tuning those parameters.
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \end{document}
