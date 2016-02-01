@@ -110,5 +110,22 @@ By doing this, we can map the classifier output probability provided by softmax 
 	\end{align*}
 
 	\subsection{Minimizing Cross Entropy}
+
+	In order to find the weights and biases that will produce low distances for the correct classes, e.g., $D(A,a)$, and high distances for incorrect ones, e.g., $D(A,b)$, we will minimize the loss $\zeta$ which is expressed as
+
+	\begin{align*}
+		\zeta(w, b) = \displaystyle\frac{1}{N}\displaystyle\sum_{i=0}^N D(S(wx_i+b),L_i)\,,
+	\end{align*}
+
+	where $N$ is the number of samples $x$ and labels $L$ in the training set. In other words, the loss is the average cross-entropy over the entire training set. This loss, is a function of multiple parameters: the weights and the biases. This function will be large in some areas and small in others. We will find the parameters that cause the loss to be the smallest as possible. By doing this, our problem is turned into a numerical optimization one.
+
+	The simplest way to solve this problem is \emph{gradient descent}. This will take the derivative of the loss with respect to the parameters and follow that derivative by taking steps backwards until we get to a minimum, so the step will be $-\alpha\Delta\zeta(w, b)$. Figure \ref{fig:gradient-descent} represents this procedure for a simple loss function with two parameters.
+
+	\begin{figure}[!hbt]
+		\centering
+		\includegraphics[width=\textwidth]{l1/figures/contour-scatter}
+		\caption{Gradient descent from a larger area (red) to a smaller one (blue) taking steps following the derivative backwards (black) until the minimum is reached.}
+		\label{fig:gradient-descent}
+	\end{figure}
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \end{document}
