@@ -57,7 +57,7 @@
 		wx + b = y\,,
 	\end{align*}
 
-	where $w$ is the weights matrix, $b$ is the bias vector, $x$ is the matrix corresponding to the values of the sample to be clasified, and $y$ is the output or scores vector -- which has as many elements as classes can be classified. The training will change the values of the weights and biases to tune the prediction system so that for each input $x$ its correct class is predicted in $y$.
+	where $w$ is the weights matrix, $b$ is the bias vector, $x$ is the input vector (corresponding to the values of the sample to be classified), and $y$ is the output or scores vector -- which has as many elements as classes to be classified. The training will change the values of the weights and biases to tune the prediction system so that for each input $x$ its correct class is predicted in $y$.
 
 	\subsection{Softmax}
 
@@ -78,7 +78,7 @@
 
 	\subsection{One-Hot Encoding}
 
-	We need a way to represent class labels mathematically. We can use some sort of \emph{one-hot encoding} for that, representing each label with a vector that has as many elements as class labels our system is able to classify. Each one-hot class vector will have a $1$ at the position of the corresponding class, and the rest of the elements will be $0$.
+	We need a way to represent class labels mathematically. We can use a so-called \emph{one-hot encoding} for that, representing each label with a vector that has as many elements as class labels our system is able to classify. Each one-hot class vector will have a $1$ at the position of the corresponding class, and the rest of the elements will be $0$.
 
 	\begin{table}[!hbt]
 		\centering
