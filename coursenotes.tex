@@ -3,7 +3,11 @@
 
 \usepackage{acronym}
 \acrodef{GD}{Gradient Descent}
+\acrodef{RELU}{Rectified Linear Unit}
 \acrodef{SGD}{Stochastic Gradient Descent}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
 
 % Uncomment these for a different family of fonts
 % \usepackage{cmbright}
@@ -20,7 +24,6 @@
 % Headers
 \chead{\thiscoursename \ Course Notes}
 \lhead{\thisterm}
-
 
 %%%%%% TITLE %%%%%%
 \newcommand{\notefront} {
@@ -151,6 +154,64 @@ By doing this, we can map the classifier output probability provided by softmax 
 	\textbf{Notice that using a higher learning rate does not necessarily mean that the algorithm learns more or faster. In fact, we can often get to a better model faster by lowering the learning rate. So as a rule of thumb, when things do not work, lower the learning rate.}
 
 	Due to this high number of hyperparameters (initial learning rate, learning rate decay, momentum, batch size, and weight initialization) \ac{SGD} has earned a \textit{black magic} reputation. Some modifications have arisen, like ADAGRAD, which implicitly sets the initial learning rate, decays it and does momentum, making training less sensitive to hyperparameters but also less precise than tuning those parameters.
+
+	\section{Deep Neural Networks}
+
+	\subsection{Limitations of Linear Models}
+
+	One of the main limitations of linear models their inherent complexity in terms of number of parameters. In general, a system with $N$ inputs and $K$ outputs will have $(N+1)K$ parameters to use, e.g., for classifying $28 \times 28$ images into $10$ categories, a linear model like $wx + b = y$ will have $28\cdot28\cdot10 + 10 = 7850$ parameters. However, in practice, we would like to use many more paremeters.
+
+	In addition, this kind of models are linear, which means that the kind of interactions that can be represented by them is limited. For instance, if two inputs interact in an additive way the model can properly represent that, but if the output depends on the product of them, this model will not be able to efficiently represent that.
+
+	However, linear models are extremely efficient, mainly thanks to the deployment of matrix multiplication routines in GPUs. What is more, they are numerically stable, it can be shown mathematically that small changes in the input can never yield big changes in the output. Furthermore, the derivative of a linear function is constant.
+
+	Taking all of this into account, the goal is to keep the parameters inside big linear functions due to their efficiency, but we want the entire model to be nonlinear in order to achieve better representations. For that, we will introduce non-linearities.
+
+	\subsection{Rectified Linear Units (ReLU)}
+
+	One of the most typical non-linear functions that are commonly introduced in linear models to induce non-linearities are the \emph{\ac{RELU}} functions. They are linear if $x$ is greater than zero, and zero everywhere else. \acp{RELU} also feature really simple derivatives: when $x$ is zero, the derivative is zero, and when $x$ is greater than zero, the derivative is one. Figure \ref{fig:relu} shows a plot of a \ac{RELU} function, and Figure \ref{fig:relu-derivative} shows its derivative.
+
+	\begin{figure}[!hbt]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[grid=both,
+				mark = none,
+				xmin = -16, ymin = -8,
+				xmax = 16, ymax = 8,
+				axis y line=center,
+				axis x line=middle,
+				xlabel=$x$, ylabel=$y$,
+				clip=false,
+				width=\linewidth,
+				height=15em]
+				\addplot[blue, domain=-16:16,restrict y to domain=-8:8, samples=100]  {max(0,x)} node[right,anchor=north west]{$y=max(0,x)$};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{\ac{RELU} function.}
+		\label{fig:relu}
+	\end{figure}
+
+	\begin{figure}[!hbt]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[grid=both,
+				mark = none,
+				xmin = -16, ymin = -8,
+				xmax = 16, ymax = 8,
+				axis y line=center,
+				axis x line=middle,
+				xlabel=$x$, ylabel=$y$,
+				clip=false,
+				width=\linewidth,
+				height=15em]
+				\addplot[blue, domain=-16:0,restrict y to domain=-8:8, samples=100]  {0} node[right,anchor=north west]{};
+				\addplot[blue, domain=0:16,restrict y to domain=-8:8, samples=100]  {1} node[right,anchor=south east]{$y' = dy/dx$};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{\ac{RELU} function derivative.}
+		\label{fig:relu-derivative}
+	\end{figure}
+
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \end{document}
